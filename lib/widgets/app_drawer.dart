@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:hospitalize/screens/admin_request.dart';
 import 'package:hospitalize/services/auth_service.dart';
+import 'package:hospitalize/widgets/admin_wrapper.dart';
 import 'package:provider/provider.dart';
 
 class AppDrawer extends StatefulWidget {
@@ -44,7 +44,7 @@ class _AppDrawerState extends State<AppDrawer> {
             Divider(color: Theme.of(context).primaryColor),
             ListTile(
               onTap: () {
-                Navigator.pushNamed(context, Register.routeName);
+                Navigator.pushNamed(context, AdminWrapper.routeName);
               },
               leading: const Icon(Icons.admin_panel_settings),
               title: const Text('Admin'),
@@ -53,7 +53,6 @@ class _AppDrawerState extends State<AppDrawer> {
             ListTile(
               onTap: () async {
                 await service.signOut(context: context);
-                /*Navigator.pushReplacementNamed(context, Wrapper.routeName);*/
               },
               leading: const Icon(Icons.exit_to_app),
               title: const Text('Logout'),

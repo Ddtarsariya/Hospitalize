@@ -1,5 +1,8 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:hospitalize/screens/admin_screen.dart';
+import 'package:hospitalize/screens/search_hospital.dart';
+import 'package:hospitalize/widgets/admin_wrapper.dart';
 import 'package:provider/provider.dart';
 
 import 'screens/admin_request.dart';
@@ -38,11 +41,15 @@ class _MyAppState extends State<MyApp> {
           initialRoute: '/',
           routes: {
             Wrapper.routeName: (context) => const Wrapper(),
+            AdminRequest.routeName: (context) =>
+                const AdminRequest(childWidget: null),
+            Login.routeName: (context) => const Login(),
             Home.routeName: (context) => const Home(),
             CompareHospital.routeName: (context) => const CompareHospital(),
             TrackAmbulance.routeName: (context) => const TrackAmbulance(),
-            Register.routeName: (context) => const Register(),
-            Login.routeName: (context) => const Login(),
+            AdminScreen.routeName: (context) => const AdminScreen(),
+            AdminWrapper.routeName: (context) => const AdminWrapper(),
+            SearchHospital.routeName: (context) => const SearchHospital(),
           },
         );
       },

@@ -25,9 +25,10 @@ class Hospital {
 
   Future<void> requestForRegister() async {
     final user = FirebaseAuth.instance.currentUser;
-    CollectionReference request = FirebaseFirestore.instance
-        .collection('users/hospitals/requests/${user!.email}');
-    request.add({
+    final request = FirebaseFirestore.instance
+        .collection('users/hospitals/requests')
+        .doc(user!.email);
+    request.set({
       'name': name,
       'location': location,
       'mobile': mobile,

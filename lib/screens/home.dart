@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hospitalize/screens/compare_hospital.dart';
+import 'package:hospitalize/screens/search_hospital.dart';
 import 'package:hospitalize/screens/track_ambulance.dart';
 
 import '../widgets/app_drawer.dart';
@@ -26,6 +27,17 @@ class Home extends StatelessWidget {
           BottomNavigationBarItem(label: '', icon: Icon(Icons.phone)),
           BottomNavigationBarItem(label: '', icon: Icon(Icons.search)),
         ],
+        onTap: (index) {
+          switch (index) {
+            case 0:
+              break;
+            case 1:
+              Navigator.pushNamed(context, SearchHospital.routeName);
+              break;
+            default:
+              break;
+          }
+        },
       ),
       body: SingleChildScrollView(
         child: Column(

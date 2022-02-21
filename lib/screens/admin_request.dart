@@ -1,35 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:hospitalize/models/hospital.dart';
 
-class Register extends StatelessWidget {
-  static const routeName = '/register-screen';
-  final Function? toggleView;
+class AdminRequest extends StatelessWidget {
+  static const routeName = '/admin-request';
+  final Widget? childWidget;
 
-  const Register({Key? key, this.toggleView}) : super(key: key);
+  const AdminRequest({Key? key, @required this.childWidget}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Register'),
+        title: const Text('Request'),
       ),
-      body: FutureBuilder(
-          future: Hospital().requestStatus(),
-          builder: (context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.waiting) {
-              return const Center(
-                child: CircularProgressIndicator(),
-              );
-            } else if (snapshot.data == 'No') {
-              return const Center(
-                child: Text('Pending'),
-              );
-            } else if (snapshot.data == 'Yes') {
-              return const Center(
-                child: Text('Verified'),
-              );
-            }
-            return Container(
+      body: childWidget == null
+          ? Container(
               padding: const EdgeInsets.all(10),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -109,17 +94,12 @@ class Register extends StatelessWidget {
                     },
                     child: const Text('Request for Register'),
                   ),
-                  /*TextButton(
-                  onPressed: () {
-                    */ /*Navigator.pushNamed(context, Login.routeName);*/ /*
-                    toggleView!();
-                  },
-                  child: const Text('Already Register? Login Here'),
-                ),*/
                 ],
               ),
-            );
-          }),
+            )
+          : Center(
+              child: childWidget,
+            ),
     );
   }
 }
