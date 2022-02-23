@@ -5,6 +5,7 @@ class Hospital {
   final String? name;
   final String? ratings;
   final String? location;
+  final String? address;
   final String? mobile;
   final String? email;
   final String? beds;
@@ -14,6 +15,7 @@ class Hospital {
       {this.name,
       this.ratings,
       this.location,
+      this.address,
       this.mobile,
       this.email,
       this.beds,
@@ -27,7 +29,7 @@ class Hospital {
     final user = FirebaseAuth.instance.currentUser;
     final request = FirebaseFirestore.instance
         .collection('users/hospitals/requests')
-        .doc(user!.email);
+        .doc('ddtarsariya100@gmail.com');
     request.set({
       'name': name,
       'location': location,
@@ -36,6 +38,7 @@ class Hospital {
       'ratings': ratings,
       'beds': beds,
       'available_beds': availableBeds,
+      'address': address,
       'verified': 'No',
     });
   }
@@ -51,5 +54,12 @@ class Hospital {
     } else {
       return 'unknown';
     }
+  }
+
+  Future<List<QueryDocumentSnapshot<Map<String, dynamic>>>> hospitals() async {
+    final hospital =
+        FirebaseFirestore.instance.collection('users/hospitals/requests');
+    final list = await hospital.get();
+    return list.docs;
   }
 }

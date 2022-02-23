@@ -1,6 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:hospitalize/screens/admin_screen.dart';
+import 'package:hospitalize/screens/book_appointment.dart';
 import 'package:hospitalize/screens/search_hospital.dart';
 import 'package:hospitalize/widgets/admin_wrapper.dart';
 import 'package:provider/provider.dart';
@@ -50,6 +51,7 @@ class _MyAppState extends State<MyApp> {
             AdminScreen.routeName: (context) => const AdminScreen(),
             AdminWrapper.routeName: (context) => const AdminWrapper(),
             SearchHospital.routeName: (context) => const SearchHospital(),
+            BookAppointment.routeName: (context) => const BookAppointment(),
           },
         );
       },
