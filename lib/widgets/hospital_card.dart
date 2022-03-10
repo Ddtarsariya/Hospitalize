@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:hospitalize/screens/book_appointment.dart';
+
+import '../models/hospital.dart';
 
 class HospitalCard extends StatelessWidget {
-  final Map<String, dynamic> data;
+  final Hospital data;
   const HospitalCard({Key? key, required this.data}) : super(key: key);
 
   @override
@@ -21,10 +24,10 @@ class HospitalCard extends StatelessWidget {
               children: [
                 const Icon(Icons.eighteen_mp),
                 const SizedBox(width: 10),
-                Expanded(child: Text(data['name'])),
+                Expanded(child: Text(data.name ?? '')),
                 const Icon(Icons.grade_outlined),
                 const SizedBox(width: 5),
-                Text(data['ratings']),
+                Text(data.ratings ?? ''),
               ],
             ),
             Divider(
@@ -32,7 +35,7 @@ class HospitalCard extends StatelessWidget {
               thickness: 2,
             ),
             const SizedBox(height: 10),
-            Text(data['address']),
+            Text(data.address ?? ''),
             const SizedBox(height: 15),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -41,14 +44,14 @@ class HospitalCard extends StatelessWidget {
                   children: [
                     const Icon(Icons.local_phone),
                     const SizedBox(width: 5),
-                    Text(data['mobile']),
+                    Text(data.mobile ?? ''),
                   ],
                 ),
                 Row(
                   children: [
                     const Icon(Icons.local_phone),
                     const SizedBox(width: 5),
-                    Text(data['mobile']),
+                    Text(data.mobile ?? ''),
                   ],
                 )
               ],
@@ -71,7 +74,17 @@ class HospitalCard extends StatelessWidget {
                     const Icon(Icons.add_box_rounded),
                     const SizedBox(width: 5),
                     OutlinedButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          if (data.isBookingAvailable!) {
+                            Navigator.pushNamed(
+                                context, BookAppointment.routeName);
+                          } else {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                    content: Text(
+                                        'For this hospital appointment booking unavailable!')));
+                          }
+                        },
                         child: const Text('Book appointment')),
                   ],
                 )

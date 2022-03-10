@@ -1,17 +1,35 @@
 import 'package:flutter/material.dart';
+import 'package:hospitalize/models/hospital.dart';
 import 'package:hospitalize/screens/compare_hospital.dart';
 import 'package:hospitalize/screens/search_hospital.dart';
-import 'package:hospitalize/screens/track_ambulance.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 import '../widgets/app_drawer.dart';
+import 'home_map.dart';
+import 'track_ambulance.dart';
 
 class Home extends StatelessWidget {
   static const routeName = '/home';
   const Home({Key? key}) : super(key: key);
 
+  void setPermissions() async {
+    final serviceStatus = await Permission.locationWhenInUse.serviceStatus;
+    bool isGpsOn = serviceStatus == ServiceStatus.enabled;
+    final status = await Permission.locationWhenInUse.request();
+    if (status == PermissionStatus.granted) {
+      print('Permission granted');
+    } else if (status == PermissionStatus.denied) {
+      print(
+          'Denied. Show a dialog with a reason and again ask for the permission.');
+    } else if (status == PermissionStatus.permanentlyDenied) {
+      print('Take the user to the settings page.');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
+    setPermissions();
     return Scaffold(
       appBar: AppBar(
         title: const Text('Home'),
@@ -39,80 +57,86 @@ class Home extends StatelessWidget {
           }
         },
       ),
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            Container(
-              margin: const EdgeInsets.all(8),
-              height: size.height / 2,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(5),
-                border: Border.all(
-                  color: Theme.of(context).primaryColor,
-                  width: 2,
-                ),
-              ),
-              child: Center(
+      body: FutureBuilder<bool>(
+          future: Hospital().setHospital(),
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const Center(
+                child: CircularProgressIndicator(),
+              );
+            } else if (snapshot.hasError) {
+              return const Center(
+                child: Text('Something went wrong!'),
+              );
+            } else {
+              return SingleChildScrollView(
                 child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: const [
-                    Icon(
-                      Icons.map_outlined,
-                      size: 70,
-                      color: Colors.orange,
+                  children: [
+                    Container(
+                      margin: const EdgeInsets.all(8),
+                      height: size.height / 2,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(5),
+                        border: Border.all(
+                          color: Theme.of(context).primaryColor,
+                          width: 2,
+                        ),
+                      ),
+                      child: Center(
+                        child: HomeMap(),
+                      ),
                     ),
-                    Text('Map'),
+                    Container(
+                      margin: const EdgeInsets.all(8),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(5),
+                        border: Border.all(
+                          color: Theme.of(context).primaryColor,
+                          width: 2,
+                        ),
+                      ),
+                      child: ListView(
+                        shrinkWrap: true,
+                        children: [
+                          ListTile(
+                            onTap: () {
+                              Navigator.pushNamed(
+                                  context, TrackAmbulance.routeName);
+                            },
+                            title: const Text('Track Ambulance'),
+                            leading: const Icon(Icons.add_location_rounded),
+                          ),
+                          Divider(
+                            height: 0,
+                            color: Theme.of(context).primaryColor,
+                            thickness: 2,
+                          ),
+                          ListTile(
+                            onTap: () {
+                              Navigator.pushNamed(
+                                  context, CompareHospital.routeName);
+                            },
+                            title: const Text('Compare Hospitals'),
+                            leading: const Icon(Icons.apartment_rounded),
+                          ),
+                          Divider(
+                            height: 0,
+                            color: Theme.of(context).primaryColor,
+                            thickness: 2,
+                          ),
+                          ListTile(
+                            onTap: () {},
+                            title: const Text('Beds Availability'),
+                            leading: const Icon(Icons.hotel),
+                          ),
+                        ],
+                      ),
+                    ),
                   ],
                 ),
-              ),
-            ),
-            Container(
-              margin: const EdgeInsets.all(8),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(5),
-                border: Border.all(
-                  color: Theme.of(context).primaryColor,
-                  width: 2,
-                ),
-              ),
-              child: ListView(
-                shrinkWrap: true,
-                children: [
-                  ListTile(
-                    onTap: () {
-                      Navigator.pushNamed(context, TrackAmbulance.routeName);
-                    },
-                    title: const Text('Track Ambulance'),
-                    leading: const Icon(Icons.add_location_rounded),
-                  ),
-                  Divider(
-                    height: 0,
-                    color: Theme.of(context).primaryColor,
-                    thickness: 2,
-                  ),
-                  ListTile(
-                    onTap: () {
-                      Navigator.pushNamed(context, CompareHospital.routeName);
-                    },
-                    title: const Text('Compare Hospitals'),
-                    leading: const Icon(Icons.apartment_rounded),
-                  ),
-                  Divider(
-                    height: 0,
-                    color: Theme.of(context).primaryColor,
-                    thickness: 2,
-                  ),
-                  ListTile(
-                    onTap: () {},
-                    title: const Text('Beds Availability'),
-                    leading: const Icon(Icons.hotel),
-                  ),
-                ],
-              ),
-            ),
-          ],
-        ),
-      ),
+              );
+            }
+          }),
     );
   }
 }
