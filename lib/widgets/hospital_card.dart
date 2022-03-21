@@ -5,6 +5,7 @@ import '../models/hospital.dart';
 
 class HospitalCard extends StatelessWidget {
   final Hospital data;
+
   const HospitalCard({Key? key, required this.data}) : super(key: key);
 
   @override
@@ -74,18 +75,19 @@ class HospitalCard extends StatelessWidget {
                     const Icon(Icons.add_box_rounded),
                     const SizedBox(width: 5),
                     OutlinedButton(
-                        onPressed: () {
-                          if (data.isBookingAvailable!) {
-                            Navigator.pushNamed(
-                                context, BookAppointment.routeName);
-                          } else {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(
-                                    content: Text(
-                                        'For this hospital appointment booking unavailable!')));
-                          }
-                        },
-                        child: const Text('Book appointment')),
+                      onPressed: () {
+                        if (data.isBookingAvailable!) {
+                          Navigator.pushNamed(
+                              context, BookAppointment.routeName,
+                              arguments: data);
+                        } else {
+                          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                              content: Text(
+                                  'For this hospital appointment booking unavailable!')));
+                        }
+                      },
+                      child: const Text('Book appointment'),
+                    ),
                   ],
                 )
               ],

@@ -34,9 +34,139 @@ class _CompareHospitalState extends State<CompareHospital> {
       body: SingleChildScrollView(
         child: Container(
           margin: const EdgeInsets.all(10),
-          child: Column(
+          child: ListView(
+            shrinkWrap: true,
+            physics: const NeverScrollableScrollPhysics(),
             children: [
-              /* Column(
+              Card(
+                shape: cardShape,
+                child: Column(
+                  mainAxisAlignment: _hospital1Close
+                      ? MainAxisAlignment.center
+                      : MainAxisAlignment.start,
+                  children: [
+                    Visibility(
+                      visible: !_hospital1Close,
+                      child: Align(
+                        alignment: Alignment.topRight,
+                        child: Card(
+                          margin: const EdgeInsets.only(right: 10, top: 10),
+                          color: Colors.red,
+                          child: InkWell(
+                            onTap: () {
+                              setState(() {
+                                _hospital1Close = true;
+                              });
+                            },
+                            child: const Icon(
+                              Icons.close,
+                              color: Colors.white,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                    Visibility(
+                      visible: _hospital1Close,
+                      child: SizedBox(
+                        height: 250,
+                        width: double.maxFinite,
+                        child: InkWell(
+                          onTap: () {
+                            Navigator.pushNamed(
+                                    context, SearchHospital.routeName,
+                                    arguments: true)
+                                .then((value) {
+                              if (value != null) {
+                                _hospital1 = value as Hospital;
+                                setState(() {
+                                  _hospital1Close = false;
+                                });
+                              }
+                            });
+                          },
+                          child: const Icon(
+                            Icons.apartment_rounded,
+                            size: 70,
+                          ),
+                        ),
+                      ),
+                      replacement: CompareHospitalCard(
+                        data: _hospital1,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              Card(
+                shape: cardShape,
+                child: Column(
+                  mainAxisAlignment: _hospital2Close
+                      ? MainAxisAlignment.center
+                      : MainAxisAlignment.start,
+                  children: [
+                    Visibility(
+                      visible: !_hospital2Close,
+                      child: Align(
+                        alignment: Alignment.topRight,
+                        child: Card(
+                          margin: const EdgeInsets.only(right: 10, top: 10),
+                          color: Colors.red,
+                          child: InkWell(
+                            onTap: () {
+                              setState(() {
+                                _hospital2Close = true;
+                              });
+                            },
+                            child: const Icon(
+                              Icons.close,
+                              color: Colors.white,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                    Visibility(
+                      visible: _hospital2Close,
+                      child: SizedBox(
+                        height: 250,
+                        width: double.maxFinite,
+                        child: InkWell(
+                          onTap: () {
+                            Navigator.pushNamed(
+                                    context, SearchHospital.routeName,
+                                    arguments: true)
+                                .then((value) {
+                              if (value != null) {
+                                _hospital2 = value as Hospital;
+                                setState(() {
+                                  _hospital2Close = false;
+                                });
+                              }
+                            });
+                          },
+                          child: const Icon(
+                            Icons.apartment_rounded,
+                            size: 70,
+                          ),
+                        ),
+                      ),
+                      replacement: CompareHospitalCard(
+                        data: _hospital2,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+/* Column(
                 children: [
                   TextField(
                     decoration: InputDecoration(
@@ -59,139 +189,3 @@ class _CompareHospitalState extends State<CompareHospital> {
                   ),
                 ],
               ),*/
-              Container(
-                height: MediaQuery.of(context).size.height / 1.5,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Expanded(
-                      flex: 5,
-                      child: Card(
-                        shape: cardShape,
-                        child: Column(
-                          mainAxisAlignment: _hospital1Close
-                              ? MainAxisAlignment.center
-                              : MainAxisAlignment.start,
-                          children: [
-                            Visibility(
-                              visible: !_hospital1Close,
-                              child: Align(
-                                alignment: Alignment.topRight,
-                                child: Card(
-                                  margin:
-                                      const EdgeInsets.only(right: 10, top: 10),
-                                  color: Colors.red,
-                                  child: InkWell(
-                                    onTap: () {
-                                      setState(() {
-                                        _hospital1Close = true;
-                                      });
-                                    },
-                                    child: const Icon(
-                                      Icons.close,
-                                      color: Colors.white,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ),
-                            Visibility(
-                              visible: _hospital1Close,
-                              child: InkWell(
-                                onTap: () {
-                                  Navigator.pushNamed(
-                                          context, SearchHospital.routeName,
-                                          arguments: true)
-                                      .then((value) {
-                                    if (value != null) {
-                                      _hospital1 = value as Hospital;
-                                      setState(() {
-                                        _hospital1Close = false;
-                                      });
-                                    }
-                                  });
-                                },
-                                child: const Icon(
-                                  Icons.apartment_rounded,
-                                  size: 70,
-                                ),
-                              ),
-                              replacement: CompareHospitalCard(
-                                data: _hospital1,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                    Expanded(
-                      flex: 5,
-                      child: Card(
-                        shape: cardShape,
-                        child: Column(
-                          mainAxisAlignment: _hospital2Close
-                              ? MainAxisAlignment.center
-                              : MainAxisAlignment.start,
-                          children: [
-                            Visibility(
-                              visible: !_hospital2Close,
-                              child: Align(
-                                alignment: Alignment.topRight,
-                                child: Card(
-                                  margin:
-                                      const EdgeInsets.only(right: 10, top: 10),
-                                  color: Colors.red,
-                                  child: InkWell(
-                                    onTap: () {
-                                      setState(() {
-                                        _hospital2Close = true;
-                                      });
-                                    },
-                                    child: const Icon(
-                                      Icons.close,
-                                      color: Colors.white,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ),
-                            Visibility(
-                              visible: _hospital2Close,
-                              child: InkWell(
-                                onTap: () {
-                                  Navigator.pushNamed(
-                                          context, SearchHospital.routeName,
-                                          arguments: true)
-                                      .then((value) {
-                                    if (value != null) {
-                                      _hospital2 = value as Hospital;
-                                      setState(() {
-                                        _hospital2Close = false;
-                                      });
-                                    }
-                                  });
-                                },
-                                child: const Icon(
-                                  Icons.apartment_rounded,
-                                  size: 70,
-                                ),
-                              ),
-                              replacement: CompareHospitalCard(
-                                data: _hospital2,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-}

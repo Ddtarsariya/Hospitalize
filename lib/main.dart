@@ -1,8 +1,11 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:hospitalize/screens/add_hospital_detail.dart';
+import 'package:hospitalize/screens/admin_edit.dart';
 import 'package:hospitalize/screens/admin_screen.dart';
+import 'package:hospitalize/screens/beds_availability.dart';
 import 'package:hospitalize/screens/book_appointment.dart';
+import 'package:hospitalize/screens/booked_appointments.dart';
 import 'package:hospitalize/screens/search_hospital.dart';
 import 'package:hospitalize/widgets/admin_wrapper.dart';
 import 'package:provider/provider.dart';
@@ -54,6 +57,10 @@ class _MyAppState extends State<MyApp> {
             SearchHospital.routeName: (context) => const SearchHospital(),
             BookAppointment.routeName: (context) => const BookAppointment(),
             AddHospitalDetail.routeName: (context) => const AddHospitalDetail(),
+            BedsAvailability.routeName: (context) => const BedsAvailability(),
+            AdminEdit.routeName: (context) => const AdminEdit(),
+            BookedAppointments.routeName: (context) =>
+                const BookedAppointments(),
           },
         );
       },

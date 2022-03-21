@@ -24,8 +24,9 @@ class _SearchHospitalState extends State<SearchHospital> {
                   setState(() {
                     searchData = s;
                     filterData = hospitalData
-                        .where(
-                            (element) => element.name!.startsWith(searchData!))
+                        .where((element) => element.name!
+                            .toLowerCase()
+                            .startsWith(searchData!.toLowerCase()))
                         .toList();
                   });
                 },

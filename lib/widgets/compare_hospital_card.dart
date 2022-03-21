@@ -1,6 +1,9 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import '../models/hospital.dart';
+import '../screens/book_appointment.dart';
+import '../utils/constant.dart';
 
 class CompareHospitalCard extends StatelessWidget {
   final Hospital data;
@@ -8,6 +11,7 @@ class CompareHospitalCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final color = Theme.of(context).primaryColor;
     return Padding(
       padding: const EdgeInsets.all(15.0),
       child: Column(
@@ -20,7 +24,8 @@ class CompareHospitalCard extends StatelessWidget {
               Expanded(
                   child: Text(
                 data.name ?? '',
-                style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold),
+                style:
+                    const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
               )),
               const Icon(Icons.grade_outlined),
               const SizedBox(width: 5),
@@ -28,29 +33,66 @@ class CompareHospitalCard extends StatelessWidget {
             ],
           ),
           Divider(
-            color: Theme.of(context).primaryColor,
+            color: color,
             thickness: 2,
           ),
           const SizedBox(height: 10),
           Text(data.address ?? ''),
           const SizedBox(height: 15),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Row(
-                children: [
-                  const Icon(Icons.local_phone),
-                  const SizedBox(width: 5),
-                  Text(data.mobile ?? ''),
-                ],
+          Card(
+            shape: cardShape,
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: IntrinsicHeight(
+                child: Row(
+                  children: [
+                    const Icon(Icons.phone),
+                    const VerticalDivider(color: Colors.black),
+                    Expanded(child: Text(data.mobile ?? '')),
+                    const VerticalDivider(color: Colors.black),
+                    Expanded(child: Text(data.mobile ?? '')),
+                  ],
+                ),
               ),
-              Row(
-                children: [
-                  const Icon(Icons.local_phone),
-                  const SizedBox(width: 5),
-                  Text(data.mobile ?? ''),
-                ],
-              )
+            ),
+          ),
+          Divider(
+            color: color,
+          ),
+          Row(
+            children: [
+              Expanded(
+                child: Card(
+                  shape: cardShape,
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: IntrinsicHeight(
+                      child: Row(
+                        children: [
+                          const Icon(Icons.bed),
+                          const VerticalDivider(),
+                          Text('${data.availableBeds} / ${data.beds}'),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+              Expanded(
+                child: OutlinedButton(
+                  onPressed: () {
+                    if (data.isBookingAvailable!) {
+                      Navigator.pushNamed(context, BookAppointment.routeName,
+                          arguments: data);
+                    } else {
+                      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                          content: Text(
+                              'For this hospital appointment booking unavailable!')));
+                    }
+                  },
+                  child: const Text('Book appointment'),
+                ),
+              ),
             ],
           ),
         ],
