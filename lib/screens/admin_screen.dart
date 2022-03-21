@@ -1,8 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:hospitalize/models/hospital.dart';
 import 'package:hospitalize/screens/add_hospital_detail.dart';
+import 'package:hospitalize/screens/admin_edit.dart';
+import 'package:hospitalize/screens/booked_appointments.dart';
+import 'package:hospitalize/utils/constant.dart';
 
 class AdminScreen extends StatefulWidget {
   final bool isPending;
@@ -18,17 +22,126 @@ class _AdminScreenState extends State<AdminScreen> {
   final user = FirebaseAuth.instance.currentUser;
   bool booking = false;
 
-  RoundedRectangleBorder get cardShape {
-    return RoundedRectangleBorder(
-      side: BorderSide(color: Theme.of(context).primaryColor, width: 2),
-      borderRadius: BorderRadius.circular(5),
-    );
+  showBedsEditDialogue(int totalBeds, int beds) {
+    showDialog(
+        context: context,
+        builder: (ctx) {
+          return StatefulBuilder(
+            builder: (context, setState) {
+              return Dialog(
+                child: Padding(
+                  padding: const EdgeInsets.all(10),
+                  child: ListView(
+                    shrinkWrap: true,
+                    children: [
+                      const Padding(
+                        padding: EdgeInsets.all(8.0),
+                        child: Text(
+                          'Change Availability of beds',
+                          style: TextStyle(fontSize: 15),
+                        ),
+                      ),
+                      const Divider(height: 30),
+                      Row(
+                        children: [
+                          Flexible(
+                            child: TextFormField(
+                              autovalidateMode:
+                                  AutovalidateMode.onUserInteraction,
+                              validator: (value) {
+                                if (value == null || value.isEmpty) {
+                                  return 'Please enter total beds';
+                                }
+                                return null;
+                              },
+                              initialValue: totalBeds.toString(),
+                              textInputAction: TextInputAction.next,
+                              onChanged: (val) {
+                                totalBeds = int.parse(val);
+                              },
+                              keyboardType: TextInputType.number,
+                              inputFormatters: <TextInputFormatter>[
+                                FilteringTextInputFormatter.digitsOnly
+                              ],
+                              decoration: InputDecoration(
+                                label: const Text('Enter beds'),
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(5),
+                                ),
+                              ),
+                            ),
+                          ),
+                          Card(
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Text(
+                                beds.toString(),
+                                style: const TextStyle(fontSize: 30),
+                              ),
+                            ),
+                          ),
+                          Column(
+                            children: [
+                              Card(
+                                child: InkWell(
+                                    onTap: () {
+                                      if (totalBeds <= beds) return;
+                                      setState(() {
+                                        beds += 1;
+                                      });
+                                    },
+                                    child: const Icon(Icons.add)),
+                              ),
+                              Card(
+                                child: InkWell(
+                                    onTap: () {
+                                      setState(() {
+                                        if (beds > 0) beds -= 1;
+                                      });
+                                    },
+                                    child: const Icon(Icons.remove)),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                      ElevatedButton(
+                          onPressed: () {
+                            if (totalBeds.toString().isNotEmpty) {
+                              if (beds > totalBeds) {
+                                setState(() {
+                                  beds = 0;
+                                });
+                                return;
+                              }
+                              var email =
+                                  FirebaseAuth.instance.currentUser!.email;
+                              FirebaseFirestore.instance
+                                  .collection('users')
+                                  .doc('hospitals')
+                                  .collection('verified')
+                                  .doc(email)
+                                  .update({
+                                'beds': totalBeds.toString(),
+                                'available_beds': beds.toString()
+                              });
+                              Navigator.pop(context, true);
+                            }
+                          },
+                          child: Text('save')),
+                    ],
+                  ),
+                ),
+              );
+            },
+          );
+        }).then((value) {
+      if (value != null) setState(() {});
+    });
   }
 
   @override
   Widget build(BuildContext context) {
-    print('%%%%%%%%%%%%%');
-    print(widget.isPending);
     return Scaffold(
       appBar: AppBar(
         title: const Text('Admin'),
@@ -41,13 +154,10 @@ class _AdminScreenState extends State<AdminScreen> {
               child: CircularProgressIndicator(),
             );
           } else if (snapshot.data == null || !snapshot.data!.exists) {
-            return PendingForDetail(
-                resetScreen: () => setState(() {
-                      print('.......................??');
-                    }));
+            return PendingForDetail(resetScreen: () => setState(() {}));
           } else {
             final data = snapshot.data;
-            print(snapshot.data?.get('name'));
+
             return Card(
               margin: const EdgeInsets.all(10),
               shape: cardShape,
@@ -55,7 +165,7 @@ class _AdminScreenState extends State<AdminScreen> {
                 padding: const EdgeInsets.all(8.0),
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
                     Row(
                       children: [
@@ -67,7 +177,12 @@ class _AdminScreenState extends State<AdminScreen> {
                           child: Text(data?.get('name')),
                         ),
                         IconButton(
-                          onPressed: () {},
+                          onPressed: () {
+                            Navigator.pushNamed(context, AdminEdit.routeName)
+                                .then((value) {
+                              if (value != null) setState(() {});
+                            });
+                          },
                           icon: const Icon(Icons.edit),
                         ),
                       ],
@@ -110,8 +225,19 @@ class _AdminScreenState extends State<AdminScreen> {
                                       children: [
                                         const Icon(Icons.bed),
                                         const VerticalDivider(),
-                                        Text(
-                                            '${data?.get('available_beds')} / ${data?.get('beds')}'),
+                                        Expanded(
+                                          child: Text(
+                                              '${data?.get('available_beds')} / ${data?.get('beds')}'),
+                                        ),
+                                        InkWell(
+                                          onTap: () {
+                                            showBedsEditDialogue(
+                                                int.parse(data?.get('beds')),
+                                                int.parse(data
+                                                    ?.get('available_beds')));
+                                          },
+                                          child: const Icon(Icons.edit),
+                                        ),
                                       ],
                                     ),
                                   ),
@@ -155,6 +281,12 @@ class _AdminScreenState extends State<AdminScreen> {
                         ),
                       ],
                     ),
+                    OutlinedButton(
+                        onPressed: () {
+                          Navigator.pushNamed(
+                              context, BookedAppointments.routeName);
+                        },
+                        child: const Text('Booked Appointments'))
                   ],
                 ),
               ),
