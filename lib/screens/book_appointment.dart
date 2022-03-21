@@ -162,16 +162,24 @@ class _BookAppointmentState extends State<BookAppointment> {
                   onPressed: () {
                     if (_key.currentState!.validate() && selectedDate != null) {
                       final user = FirebaseAuth.instance.currentUser;
-                      final request = FirebaseFirestore.instance.collection(
-                          'users/hospitals/verified/${hospital.email}/appointment');
-                      request.doc().set({
+                      var data = {
                         'name': name,
                         'mobile': mobileNo,
                         'email': user!.email,
                         'address': address,
                         'disease': disease,
                         'date': selectedDate,
-                      });
+                      };
+                      final setRequest = FirebaseFirestore.instance.collection(
+                          'users/hospitals/verified/${hospital.email}/appointment');
+                      final setDataInUser = FirebaseFirestore.instance
+                          .collection('users/${user.email}/appointment');
+                      setRequest.doc().set(data);
+                      setDataInUser.doc().set(data);
+                      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                          content: Text(
+                              'Your appointment is booked successfully!')));
+                      Navigator.pop(context);
                     }
                   },
                   child: const Text('Book an appointment'),
