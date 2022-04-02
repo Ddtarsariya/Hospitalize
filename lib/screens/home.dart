@@ -64,11 +64,13 @@ class Home extends StatelessWidget {
               return const Center(
                 child: CircularProgressIndicator(),
               );
-            } else if (snapshot.hasError) {
+            } /*else if (snapshot.hasError) {
+              print(snapshot.data);
               return const Center(
                 child: Text('Something went wrong!'),
               );
-            } else {
+            } */
+            else {
               return SingleChildScrollView(
                 child: Column(
                   children: [
@@ -82,7 +84,7 @@ class Home extends StatelessWidget {
                           width: 2,
                         ),
                       ),
-                      child: Center(
+                      child: const Center(
                         child: HomeMap(),
                       ),
                     ),

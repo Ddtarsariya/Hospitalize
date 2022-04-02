@@ -1,7 +1,9 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:hospitalize/screens/add_hospital_detail.dart';
+import 'package:hospitalize/screens/admin_driver.dart';
 import 'package:hospitalize/screens/admin_edit.dart';
+import 'package:hospitalize/screens/admin_hospital_request.dart';
 import 'package:hospitalize/screens/admin_screen.dart';
 import 'package:hospitalize/screens/beds_availability.dart';
 import 'package:hospitalize/screens/book_appointment.dart';
@@ -54,6 +56,8 @@ class _MyAppState extends State<MyApp> {
             TrackAmbulance.routeName: (context) => const TrackAmbulance(),
             AdminScreen.routeName: (context) => const AdminScreen(),
             AdminWrapper.routeName: (context) => const AdminWrapper(),
+            AdminHospitalRequest.routeName: (context) =>
+                const AdminHospitalRequest(childWidget: null),
             SearchHospital.routeName: (context) => const SearchHospital(),
             BookAppointment.routeName: (context) => const BookAppointment(),
             AddHospitalDetail.routeName: (context) => const AddHospitalDetail(),
@@ -61,6 +65,7 @@ class _MyAppState extends State<MyApp> {
             AdminEdit.routeName: (context) => const AdminEdit(),
             BookedAppointments.routeName: (context) =>
                 const BookedAppointments(),
+            AdminDriver.routeName: (context) => const AdminDriver(),
           },
         );
       },

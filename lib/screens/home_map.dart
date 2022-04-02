@@ -14,7 +14,7 @@ class _HomeMapState extends State<HomeMap> {
   late GoogleMapController mapController;
   bool resetMapToCurrent = false;
 
-  LatLng _center = const LatLng(45.521563, -122.677433);
+  final LatLng _center = const LatLng(45.521563, -122.677433);
 
   void _onMapCreated(GoogleMapController controller) {
     mapController = controller;

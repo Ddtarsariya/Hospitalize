@@ -171,7 +171,7 @@ class _BookAppointmentState extends State<BookAppointment> {
                         'date': selectedDate,
                       };
                       final setRequest = FirebaseFirestore.instance.collection(
-                          'users/hospitals/verified/${hospital.email}/appointment');
+                          'admin/hospitals/verified/${hospital.email}/appointment');
                       final setDataInUser = FirebaseFirestore.instance
                           .collection('users/${user.email}/appointment');
                       setRequest.doc().set(data);

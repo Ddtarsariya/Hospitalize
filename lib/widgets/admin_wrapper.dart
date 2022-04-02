@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hospitalize/screens/admin_hospital_request.dart';
 import 'package:hospitalize/screens/admin_request.dart';
 
 import '../models/hospital.dart';
@@ -13,10 +14,12 @@ class AdminWrapper extends StatelessWidget {
     return FutureBuilder(
       future: Hospital().requestStatus(),
       builder: (context, snapshot) {
-        print(snapshot.data);
         if (snapshot.connectionState == ConnectionState.waiting) {
-          /*return const  AdminRequest(childWidget: CircularProgressIndicator());*/
-          return Scaffold(body: Center(child: CircularProgressIndicator(),),);
+          return const Scaffold(
+            body: Center(
+              child: CircularProgressIndicator(),
+            ),
+          );
         } else if (snapshot.data == Status.fullyVerified) {
           return const AdminScreen(
             isPending: false,
@@ -26,9 +29,7 @@ class AdminWrapper extends StatelessWidget {
             isPending: true,
           );
         } else if (snapshot.data == Status.pending) {
-          return const AdminRequest(childWidget: Text('Pending'));
-        } else if (snapshot.data == Status.unknown) {
-          return const AdminRequest(childWidget: null);
+          return const AdminHospitalRequest(childWidget: Text('Pending'));
         } else {
           return const AdminRequest(childWidget: null);
         }

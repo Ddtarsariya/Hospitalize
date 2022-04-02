@@ -10,6 +10,7 @@ enum Status {
 }
 
 class Hospital {
+  final String? uid;
   final String? name;
   final String? ratings;
   final String? location;
@@ -22,6 +23,7 @@ class Hospital {
   final bool? isBookingAvailable;
 
   Hospital({
+    this.uid,
     this.isBookingAvailable,
     this.name,
     this.ratings,
@@ -38,12 +40,13 @@ class Hospital {
 
   Future<bool> setHospital() async {
     final hospital =
-        FirebaseFirestore.instance.collection('users/hospitals/verified');
+        FirebaseFirestore.instance.collection('admin/hospitals/verified');
     await hospital.get().then((value) {
       hospitalsList = value.docs
           .map((e) {
             return Hospital(
               ratings: e['ratings'],
+              uid: e['uid'],
               name: e['name'],
               mobile: e['mobile'],
               location: e['location'],
@@ -68,7 +71,7 @@ class Hospital {
   Future<void> requestForRegister() async {
     final user = FirebaseAuth.instance.currentUser;
     final request = FirebaseFirestore.instance
-        .collection('users/hospitals/requests')
+        .collection('admin/hospitals/requests')
         .doc(user!.email);
     request.set({
       'name': name,
@@ -87,7 +90,7 @@ class Hospital {
     final user = FirebaseAuth.instance.currentUser;
     Status status = Status.unknown;
     final request = await FirebaseFirestore.instance
-        .collection('users/hospitals/verified')
+        .collection('admin/hospitals/verified')
         .doc(user!.email)
         .get();
     if (request.exists) {
@@ -98,9 +101,8 @@ class Hospital {
         status = Status.pendingForDetail;
       }
     } else {
-      print('*******');
       await FirebaseFirestore.instance
-          .collection('users/hospitals/requests')
+          .collection('admin/hospitals/requests')
           .doc(user.email)
           .get()
           .then((value) {
@@ -121,14 +123,14 @@ class Hospital {
   Future<DocumentSnapshot<Map<String, dynamic>>> getHospital() async {
     final user = FirebaseAuth.instance.currentUser;
     return await FirebaseFirestore.instance
-        .collection('users/hospitals/verified')
+        .collection('admin/hospitals/verified')
         .doc(user!.email)
         .get();
   }
 
   Future<List<QueryDocumentSnapshot<Map<String, dynamic>>>> hospitals() async {
     final hospital =
-        FirebaseFirestore.instance.collection('users/hospitals/requests');
+        FirebaseFirestore.instance.collection('admin/hospitals/requests');
     final list = await hospital.get();
     return list.docs;
   }
