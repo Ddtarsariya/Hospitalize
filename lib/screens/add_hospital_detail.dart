@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:uuid/uuid.dart';
 
 class AddHospitalDetail extends StatelessWidget {
   static const routeName = '/add-hospital-detail';
@@ -179,10 +180,12 @@ class AddHospitalDetail extends StatelessWidget {
                     if (name != null) print(name);
                     if (_key.currentState!.validate()) {
                       final request = FirebaseFirestore.instance
-                          .collection('users/hospitals/verified')
+                          .collection('admin/hospitals/verified')
                           .doc(user?.email);
+                      var uid = const Uuid().v4();
                       request.set({
                         'name': name,
+                        'uid': uid,
                         'location': 'Location....',
                         'mobile': mobileNo,
                         'email': user?.email ?? 'tarsashaj',
@@ -194,7 +197,7 @@ class AddHospitalDetail extends StatelessWidget {
                         'booking': false,
                       });
                       FirebaseFirestore.instance
-                          .collection('users/hospitals/requests')
+                          .collection('admin/hospitals/requests')
                           .doc(user?.email)
                           .delete();
                       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(

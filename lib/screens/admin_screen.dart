@@ -117,9 +117,7 @@ class _AdminScreenState extends State<AdminScreen> {
                               var email =
                                   FirebaseAuth.instance.currentUser!.email;
                               FirebaseFirestore.instance
-                                  .collection('users')
-                                  .doc('hospitals')
-                                  .collection('verified')
+                                  .collection('admin/hospitals/verified')
                                   .doc(email)
                                   .update({
                                 'beds': totalBeds.toString(),
@@ -128,7 +126,7 @@ class _AdminScreenState extends State<AdminScreen> {
                               Navigator.pop(context, true);
                             }
                           },
-                          child: Text('save')),
+                          child: const Text('save')),
                     ],
                   ),
                 ),
@@ -188,6 +186,8 @@ class _AdminScreenState extends State<AdminScreen> {
                       ],
                     ),
                     const Divider(thickness: 1),
+                    const SizedBox(height: 10),
+                    Text('Unique Id : ' + data?.get('uid')),
                     const SizedBox(height: 10),
                     Text(data?.get('address')),
                     const SizedBox(height: 10),
@@ -297,7 +297,7 @@ class _AdminScreenState extends State<AdminScreen> {
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           final request = FirebaseFirestore.instance
-              .collection('users/hospitals/verified')
+              .collection('admin/hospitals/verified')
               .doc(user?.email);
           request.set({
             'name': 'Hospital name',
@@ -341,7 +341,7 @@ class _AppointBookingSwitchState extends State<AppointBookingSwitch> {
         value: booking ?? false,
         onChanged: (val) {
           final hos = FirebaseFirestore.instance
-              .collection('users/hospitals/verified')
+              .collection('admin/hospitals/verified')
               .doc(user?.email);
           hos.update({
             'booking': val,

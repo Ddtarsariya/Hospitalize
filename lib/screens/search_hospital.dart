@@ -71,7 +71,6 @@ class _SearchHospitalState extends State<SearchHospital> {
   @override
   Widget build(BuildContext context) {
     var val = ModalRoute.of(context)!.settings.arguments;
-    print(val);
     return Scaffold(
       appBar: appBar,
       body: _isSearch

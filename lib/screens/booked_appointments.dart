@@ -18,11 +18,7 @@ class BookedAppointments extends StatelessWidget {
       ),
       body: FutureBuilder<QuerySnapshot<Map<String, dynamic>>>(
         future: FirebaseFirestore.instance
-            .collection('users')
-            .doc('hospitals')
-            .collection('verified')
-            .doc(email)
-            .collection('appointment')
+            .collection('admin/hospitals/verified/$email/appointment')
             .get(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
