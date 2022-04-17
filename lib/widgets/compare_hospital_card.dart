@@ -1,12 +1,10 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-import '../models/hospital.dart';
 import '../screens/book_appointment.dart';
 import '../utils/constant.dart';
 
 class CompareHospitalCard extends StatelessWidget {
-  final Hospital data;
+  final Map<String, dynamic> data;
   const CompareHospitalCard({Key? key, required this.data}) : super(key: key);
 
   @override
@@ -23,13 +21,13 @@ class CompareHospitalCard extends StatelessWidget {
               const SizedBox(width: 10),
               Expanded(
                   child: Text(
-                data.name ?? '',
+                data['name'] ?? '',
                 style:
                     const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
               )),
               const Icon(Icons.grade_outlined),
               const SizedBox(width: 5),
-              Text(data.ratings ?? ''),
+              Text(data['ratings'] ?? ''),
             ],
           ),
           Divider(
@@ -37,7 +35,7 @@ class CompareHospitalCard extends StatelessWidget {
             thickness: 2,
           ),
           const SizedBox(height: 10),
-          Text(data.address ?? ''),
+          Text(data['address'] ?? ''),
           const SizedBox(height: 15),
           Card(
             shape: cardShape,
@@ -48,9 +46,9 @@ class CompareHospitalCard extends StatelessWidget {
                   children: [
                     const Icon(Icons.phone),
                     const VerticalDivider(color: Colors.black),
-                    Expanded(child: Text(data.mobile ?? '')),
+                    Expanded(child: Text(data['mobile'] ?? '')),
                     const VerticalDivider(color: Colors.black),
-                    Expanded(child: Text(data.mobile ?? '')),
+                    Expanded(child: Text(data['mobile'] ?? '')),
                   ],
                 ),
               ),
@@ -71,7 +69,7 @@ class CompareHospitalCard extends StatelessWidget {
                         children: [
                           const Icon(Icons.bed),
                           const VerticalDivider(),
-                          Text('${data.availableBeds} / ${data.beds}'),
+                          Text('${data['available_beds']} / ${data['beds']}'),
                         ],
                       ),
                     ),
@@ -81,7 +79,7 @@ class CompareHospitalCard extends StatelessWidget {
               Expanded(
                 child: OutlinedButton(
                   onPressed: () {
-                    if (data.isBookingAvailable!) {
+                    if (data['booking']) {
                       Navigator.pushNamed(context, BookAppointment.routeName,
                           arguments: data);
                     } else {

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:hospitalize/models/hospital.dart';
 import 'package:hospitalize/screens/search_hospital.dart';
 import 'package:hospitalize/widgets/compare_hospital_card.dart';
 
@@ -13,8 +12,8 @@ class CompareHospital extends StatefulWidget {
 }
 
 class _CompareHospitalState extends State<CompareHospital> {
-  Hospital _hospital1 = Hospital();
-  Hospital _hospital2 = Hospital();
+  Map<String, dynamic> _hospital1 = {};
+  Map<String, dynamic> _hospital2 = {};
   bool _hospital1Close = true;
   bool _hospital2Close = true;
 
@@ -78,7 +77,7 @@ class _CompareHospitalState extends State<CompareHospital> {
                                     arguments: true)
                                 .then((value) {
                               if (value != null) {
-                                _hospital1 = value as Hospital;
+                                _hospital1 = value as Map<String, dynamic>;
                                 setState(() {
                                   _hospital1Close = false;
                                 });
@@ -138,7 +137,7 @@ class _CompareHospitalState extends State<CompareHospital> {
                                     arguments: true)
                                 .then((value) {
                               if (value != null) {
-                                _hospital2 = value as Hospital;
+                                _hospital2 = value as Map<String, dynamic>;
                                 setState(() {
                                   _hospital2Close = false;
                                 });

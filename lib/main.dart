@@ -54,10 +54,11 @@ class _MyAppState extends State<MyApp> {
             Home.routeName: (context) => const Home(),
             CompareHospital.routeName: (context) => const CompareHospital(),
             TrackAmbulance.routeName: (context) => const TrackAmbulance(),
-            AdminScreen.routeName: (context) => const AdminScreen(),
+            HospitalAdminScreen.routeName: (context) =>
+                const HospitalAdminScreen(),
             AdminWrapper.routeName: (context) => const AdminWrapper(),
             AdminHospitalRequest.routeName: (context) =>
-                const AdminHospitalRequest(childWidget: null),
+                const AdminHospitalRequest(),
             SearchHospital.routeName: (context) => const SearchHospital(),
             BookAppointment.routeName: (context) => const BookAppointment(),
             AddHospitalDetail.routeName: (context) => const AddHospitalDetail(),

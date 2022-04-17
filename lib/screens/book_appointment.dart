@@ -3,8 +3,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:hospitalize/utils/constant.dart';
 
-import '../models/hospital.dart';
-
 class BookAppointment extends StatefulWidget {
   static const routeName = '/book-appointment';
 
@@ -16,14 +14,15 @@ class BookAppointment extends StatefulWidget {
 
 class _BookAppointmentState extends State<BookAppointment> {
   String? name, mobileNo, gender, disease, address;
-  late Hospital hospital;
+  late Map<String, dynamic> hospital;
   final _key = GlobalKey<FormState>();
   DateTime? selectedDate;
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    hospital = ModalRoute.of(context)!.settings.arguments as Hospital;
+    hospital =
+        ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
   }
 
   Future<DateTime?> _pickAppointmentDate() async {
@@ -171,7 +170,7 @@ class _BookAppointmentState extends State<BookAppointment> {
                         'date': selectedDate,
                       };
                       final setRequest = FirebaseFirestore.instance.collection(
-                          'admin/hospitals/verified/${hospital.email}/appointment');
+                          'admin/hospitals/verified/${hospital['email']}/appointment');
                       final setDataInUser = FirebaseFirestore.instance
                           .collection('users/${user.email}/appointment');
                       setRequest.doc().set(data);
