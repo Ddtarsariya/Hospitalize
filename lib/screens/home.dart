@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hospitalize/models/hospital.dart';
+import 'package:hospitalize/screens/beds_availability.dart';
 import 'package:hospitalize/screens/compare_hospital.dart';
 import 'package:hospitalize/screens/search_hospital.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -127,7 +128,10 @@ class Home extends StatelessWidget {
                             thickness: 2,
                           ),
                           ListTile(
-                            onTap: () {},
+                            onTap: () {
+                              Navigator.pushNamed(
+                                  context, BedsAvailability.routeName);
+                            },
                             title: const Text('Beds Availability'),
                             leading: const Icon(Icons.hotel),
                           ),

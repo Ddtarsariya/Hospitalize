@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:hospitalize/screens/admin_hospital_request.dart';
 import 'package:hospitalize/screens/admin_request.dart';
 
-import '../models/hospital.dart';
 import '../screens/admin_screen.dart';
 
 class AdminWrapper extends StatelessWidget {
@@ -11,7 +9,8 @@ class AdminWrapper extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder(
+    return const AdminRequest(childWidget: null);
+    /*return FutureBuilder(
       future: Hospital().requestStatus(),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
@@ -34,6 +33,6 @@ class AdminWrapper extends StatelessWidget {
           return const AdminRequest(childWidget: null);
         }
       },
-    );
+    );*/
   }
 }

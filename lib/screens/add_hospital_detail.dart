@@ -92,7 +92,7 @@ class AddHospitalDetail extends StatelessWidget {
                   },
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                      return 'Please enter Mobile number';
+                      return 'Please enter appointment number';
                     }
                     return null;
                   },
@@ -188,7 +188,7 @@ class AddHospitalDetail extends StatelessWidget {
                         'uid': uid,
                         'location': 'Location....',
                         'mobile': mobileNo,
-                        'email': user?.email ?? 'tarsashaj',
+                        'email': user?.email,
                         'ratings': '0',
                         'beds': beds,
                         'available_beds': availableBeds,

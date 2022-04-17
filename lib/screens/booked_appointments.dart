@@ -23,7 +23,12 @@ class BookedAppointments extends StatelessWidget {
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(child: CircularProgressIndicator());
+          } else if (snapshot.data == null || snapshot.data!.docs.isEmpty) {
+            return const Center(
+              child: Text('Yet not get any appointments!'),
+            );
           } else {
+            print("-------------- ${snapshot.data!.docs.isEmpty}");
             return ListView.builder(
               itemCount: snapshot.data!.size,
               itemBuilder: (ctx, index) {

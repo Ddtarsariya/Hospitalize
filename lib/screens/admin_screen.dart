@@ -8,17 +8,16 @@ import 'package:hospitalize/screens/admin_edit.dart';
 import 'package:hospitalize/screens/booked_appointments.dart';
 import 'package:hospitalize/utils/constant.dart';
 
-class AdminScreen extends StatefulWidget {
-  final bool isPending;
-  static const routeName = '/admin-screen';
+class HospitalAdminScreen extends StatefulWidget {
+  static const routeName = '/hospital-admin-screen';
 
-  const AdminScreen({Key? key, this.isPending = false}) : super(key: key);
+  const HospitalAdminScreen({Key? key}) : super(key: key);
 
   @override
-  State<AdminScreen> createState() => _AdminScreenState();
+  State<HospitalAdminScreen> createState() => _HospitalAdminScreenState();
 }
 
-class _AdminScreenState extends State<AdminScreen> {
+class _HospitalAdminScreenState extends State<HospitalAdminScreen> {
   final user = FirebaseAuth.instance.currentUser;
   bool booking = false;
 
@@ -152,10 +151,11 @@ class _AdminScreenState extends State<AdminScreen> {
               child: CircularProgressIndicator(),
             );
           } else if (snapshot.data == null || !snapshot.data!.exists) {
-            return PendingForDetail(resetScreen: () => setState(() {}));
+            return PendingForDetail(
+              resetScreen: () => setState(() {}),
+            );
           } else {
             final data = snapshot.data;
-
             return Card(
               margin: const EdgeInsets.all(10),
               shape: cardShape,

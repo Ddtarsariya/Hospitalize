@@ -1,6 +1,6 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:hospitalize/models/hospital.dart';
 import 'package:hospitalize/widgets/hospital_card.dart';
 
 class SearchHospital extends StatefulWidget {
@@ -14,8 +14,9 @@ class SearchHospital extends StatefulWidget {
 class _SearchHospitalState extends State<SearchHospital> {
   bool _isSearch = false;
   String? searchData;
-  final hospitalData = Hospital.hospitalsList;
-  var filterData = [];
+  /*final hospitalData = Hospital.hospitalsList;*/
+  List<QueryDocumentSnapshot<Map<String, dynamic>>>? hospitalData;
+  List<QueryDocumentSnapshot<Map<String, dynamic>>> filterData = [];
 
   AppBar get appBar => AppBar(
         title: _isSearch
@@ -23,11 +24,18 @@ class _SearchHospitalState extends State<SearchHospital> {
                 onChanged: (s) {
                   setState(() {
                     searchData = s;
-                    filterData = hospitalData
-                        .where((element) => element.name!
+                    filterData = hospitalData!
+                        .where((element) => element
+                            .data()['name']
+                            .toString()
                             .toLowerCase()
                             .startsWith(searchData!.toLowerCase()))
                         .toList();
+                    /*filterData = hospitalData
+                        .where((element) => element.name!
+                            .toLowerCase()
+                            .startsWith(searchData!.toLowerCase()))
+                        .toList();*/
                   });
                 },
                 cursorColor: Colors.white,
@@ -64,44 +72,51 @@ class _SearchHospitalState extends State<SearchHospital> {
       );
 
   @override
-  void initState() {
-    super.initState();
-  }
-
-  @override
   Widget build(BuildContext context) {
     var val = ModalRoute.of(context)!.settings.arguments;
     return Scaffold(
       appBar: appBar,
-      body: _isSearch
-          ? ListView.builder(
-              itemCount: filterData.length,
-              itemBuilder: (ctx, index) {
-                final data = filterData.elementAt(index);
-                return InkWell(
-                  onTap: () {
-                    if (val != null && val == true) {
-                      Navigator.pop(context, data);
-                    }
-                  },
-                  child: HospitalCard(data: data),
-                );
-              },
-            )
-          : ListView.builder(
-              itemCount: hospitalData.length,
-              itemBuilder: (ctx, index) {
-                final data = hospitalData.elementAt(index);
-                return InkWell(
-                  onTap: () {
-                    if (val != null && val == true) {
-                      Navigator.pop(context, data);
-                    }
-                  },
-                  child: HospitalCard(data: data),
-                );
-              },
-            ),
+      body: StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
+          stream: FirebaseFirestore.instance
+              .collection('admin/hospitals/verified')
+              .snapshots(),
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const Center(
+                child: CircularProgressIndicator(),
+              );
+            }
+            hospitalData = snapshot.data?.docs;
+            return _isSearch
+                ? ListView.builder(
+                    itemCount: filterData.length,
+                    itemBuilder: (ctx, index) {
+                      final data = filterData.elementAt(index);
+                      return InkWell(
+                        onTap: () {
+                          if (val != null && val == true) {
+                            Navigator.pop(context, data.data());
+                          }
+                        },
+                        child: HospitalCard(data: data.data()),
+                      );
+                    },
+                  )
+                : ListView.builder(
+                    itemCount: snapshot.data!.size,
+                    itemBuilder: (ctx, index) {
+                      final data = snapshot.data!.docs[index];
+                      return InkWell(
+                        onTap: () {
+                          if (val != null && val == true) {
+                            Navigator.pop(context, data.data());
+                          }
+                        },
+                        child: HospitalCard(data: data.data()),
+                      );
+                    },
+                  );
+          }),
     );
   }
 }
